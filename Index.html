@@ -9,18 +9,55 @@
 <body>
     <div class="container">
         <h2>Memory Game</h2>
+        <div class="stats">
+            <div>Timer: <span id="timer">0</span> Seconds</div>
+            <div>Clicks: <span id="clicks">0</span></div>
+        </div>        
         <div class="game"></div>
         <button class="restart" onclick="window.location.reload();">Restart Game</button>
     </div>
+<audio id="match-sound" src="https://www.myinstants.com/media/sounds/anime-wow.mp3"></audio>
+<audio id="fail-sound" src="https://www.myinstants.com/media/sounds/roblox-death-sound_1.mp3"></audio>
+<audio id="win-sound" src="https://www.myinstants.com/media/sounds/tararara-gao-yifei-trumpet-girl.mp3"></audio>
+
     <script>
         const fruit = ["🍇", "🍉", "🍊", "🍋", "🍌", "🍍", "🍎", "🍏", "🍏", "🍎", "🍍", "🍌", "🍋", "🍊",  "🍉", "🍇"];
-        var shuffledFruit = fruit.sort(() => (Math.random() > 0.5) ? 2 : -1);
-        for ( var i=0; i<shuffledFruit.length; i++) {
+        let shuffledFruit = fruit.sort(() => (Math.random() > 0.5) ? 2 : -1);
+        let timer = 0;
+        let timerInterval = null;
+        let isTimerStarted = false;
+        let clicks = 0;
+        
+        const timerDisplay = document.getElementById("timer");
+        const clicksDisplay = document.getElementById("clicks");
+        function startTimer() {
+            if (!isTimerStarted) {
+                isTimerStarted = true;
+                timerInterval = setInterval(() => {
+                    timer++;
+                    timerDisplay.textContent = timer;
+                }, 1000);
+            }
+        }
+        function stopTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+
+        function updateClicks() {
+            clicks++;
+            clicksDisplay.textContent = clicks;
+        }
+        
+        
+        for (let i=0; i<shuffledFruit.length; i++) {
             let box = document.createElement('div');
             box.className = 'item';
             box.innerHTML = shuffledFruit[i];
 
             box.onclick=function() {
+                startTimer();
+                updateClicks();
                 this.classList.add('boxOpen')
                 setTimeout(function(){
                     if(document.querySelectorAll('.boxOpen').length > 1){
@@ -31,23 +68,33 @@
                             document.querySelectorAll('.boxOpen')[1].classList.add
                             ('boxMatch')
 
+                            const sound = document.getElementById('match-sound');
+                            sound.play();
+
                             document.querySelectorAll('.boxOpen')[1].classList.remove
                             ('boxOpen')
                             document.querySelectorAll('.boxOpen')[0].classList.remove
                             ('boxOpen')
 
+                            
+                            
                             if(document.querySelectorAll('.boxMatch').length == fruit.
                             length){
                                 alert('You Won!')
+                                const sound = document.getElementById('win-sound');
+                                sound.play();
+                                stopTimer();
                             }
                         } else {
+                            const sound = document.getElementById('fail-sound');
+                            sound.play();
                             document.querySelectorAll('.boxOpen')[1].classList.remove
                             ('boxOpen')
                             document.querySelectorAll('.boxOpen')[0].classList.remove
                             ('boxOpen')
                     }
                 }
-            }, 750)
+            }, 900)
             }
             document.querySelector('.game').appendChild(box);
         }
