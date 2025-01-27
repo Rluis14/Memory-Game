@@ -9,48 +9,16 @@
 <body>
     <div class="container">
         <h2>Memory Game</h2>
+        <div class="stats">
+            <div>Timer: <span id="timer">0</span> Seconds</div>
+            <div>Clicks: <span id="clicks">0</span></div>
+        </div>        
         <div class="game"></div>
         <button class="restart" onclick="window.location.reload();">Restart Game</button>
     </div>
-    <script>
-        const fruit = ["🍇", "🍉", "🍊", "🍋", "🍌", "🍍", "🍎", "🍏", "🍏", "🍎", "🍍", "🍌", "🍋", "🍊",  "🍉", "🍇"];
-        var shuffledFruit = fruit.sort(() => (Math.random() > 0.5) ? 2 : -1);
-        for ( var i=0; i<shuffledFruit.length; i++) {
-            let box = document.createElement('div');
-            box.className = 'item';
-            box.innerHTML = shuffledFruit[i];
-
-            box.onclick=function() {
-                this.classList.add('boxOpen')
-                setTimeout(function(){
-                    if(document.querySelectorAll('.boxOpen').length > 1){
-                        if(document.querySelectorAll('.boxOpen')[0].innerHTML == 
-                        document.querySelectorAll('.boxOpen')[1].innerHTML){
-                            document.querySelectorAll('.boxOpen')[0].classList.add
-                            ('boxMatch')
-                            document.querySelectorAll('.boxOpen')[1].classList.add
-                            ('boxMatch')
-
-                            document.querySelectorAll('.boxOpen')[1].classList.remove
-                            ('boxOpen')
-                            document.querySelectorAll('.boxOpen')[0].classList.remove
-                            ('boxOpen')
-
-                            if(document.querySelectorAll('.boxMatch').length == fruit.
-                            length){
-                                alert('You Won!')
-                            }
-                        } else {
-                        document.querySelectorAll('.boxOpen')[1].classList.remove
-                        ('boxOpen')
-                        document.querySelectorAll('.boxOpen')[0].classList.remove
-                        ('boxOpen')
-                    }
-                }
-            }, 750)
-            }
-            document.querySelector('.game').appendChild(box);
-        }
-    </script>
+<audio id="match-sound" src="https://www.myinstants.com/media/sounds/anime-wow.mp3"></audio>
+<audio id="fail-sound" src="https://www.myinstants.com/media/sounds/roblox-death-sound_1.mp3"></audio>
+<audio id="win-sound" src="https://www.myinstants.com/media/sounds/tararara-gao-yifei-trumpet-girl.mp3"></audio>
+<script src="JS/style.js"></script>
 </body>
 </html>
